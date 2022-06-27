@@ -3,7 +3,6 @@ import random
 import math
 import time
 
-
 # basic values that are uses repeatedly
 
 # row and column size
