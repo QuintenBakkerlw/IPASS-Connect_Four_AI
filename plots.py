@@ -42,7 +42,6 @@ def Depth_time_Played():
     for i in data_depth:
        depth.append(i["depth_player_2"])
        time.append(i["total_time"])
-    print(time)
     return time, depth
 
 
@@ -99,6 +98,7 @@ def size_turns():
     plt.title("Size * Turns")
     plt.plot(x_axis,y_axis, marker = 'o')
     plt.show()
+
 
 
 
@@ -172,3 +172,4 @@ def depth_depth_turns():
     plt.ylabel("Amount of turns to finish")
     plt.title("Depth * Detph * Turns")
     plt.show()
+

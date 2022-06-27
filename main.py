@@ -121,7 +121,7 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
             for c in range(COLUMN_COUNT - 3):
                 window = [board[r + i][c + i] for i in range(WINDOW_LENGTH)]
                 score += evaluate_window(window, piece)
-
+        # Score negative sloped diaganal
         for r in range(ROW_COUNT - 3):
             for c in range(COLUMN_COUNT - 3):
                 window = [board[r + 3 - i][c + i] for i in range(WINDOW_LENGTH)]
@@ -132,14 +132,14 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
 
     # this function checks the board if there is a winner
     def endOfGame(board):
-        return winningMove(board, PLAYER_PIECE) or winningMove(board, AI_PIECE) or len(get_valid_locations(board)) == 0
+        return winningMove(board, PLAYER_PIECE) or winningMove(board, AI_PIECE) or len(validLocations(board)) == 0
 
     # this function uses minimax to determan the next move to make
     def minimax(board, depth, maximizingPlayer):
-        valid_locations = get_valid_locations(board)
-        is_terminal = endOfGame(board)
-        if depth == 0 or is_terminal:
-            if is_terminal:
+        valid_locations = validLocations(board)
+        terminal = endOfGame(board)
+        if depth == 0 or terminal:
+            if terminal:
                 if winningMove(board, AI_PIECE):
                     return (None, 100000000000000)
                 elif winningMove(board, PLAYER_PIECE):
@@ -159,9 +159,6 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
                 if new_score > value:
                     value = new_score
                     column = col
-                # alpha = max(alpha, value)
-                # # if alpha >= beta:
-                # #     break
             return column, value
 
         else:  # Minimizing player
@@ -175,21 +172,15 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
                 if new_score < value:
                     value = new_score
                     column = col
-                # beta = min(beta, value)
-                # if alpha >= beta:
-                #     break
             return column, value
 
     # this function get the usable location on the board
-    def get_valid_locations(board):
+    def validLocations(board):
         valid_locations = []
         for col in range(COLUMN_COUNT):
             if rowDrop(board, col):
                 valid_locations.append(col)
         return valid_locations
-
-
-
 
     # this fucntion draws a simple board layout to the terminal
     def simple_draw_board(board):
@@ -198,7 +189,7 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
 
     # this functino lets a person play the game
     def player_move(board):
-        loc = get_valid_locations(board)
+        loc = validLocations(board)
         loc.reverse()
         print(loc)
         get_input = int(input("choose your column: "))
@@ -208,8 +199,8 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
 
     # this fucntion uses a randomizer to determan the next move
     def random_player(board):
-        get_valid_locations(board)
-        col = random.choice(get_valid_locations(board))
+        validLocations(board)
+        col = random.choice(validLocations(board))
         row = nextOpenRow(board, col)
         placeAPiece(board, row, col, PLAYER_PIECE)
 
@@ -217,7 +208,7 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
     def AI_player(board, level , piece): # level gaat expoinenteel meer tijd kosten per level
         mini_max = minimax(board, level, True)
         col = mini_max[0]
-        get_valid_locations(board)
+        validLocations(board)
         row = nextOpenRow(board, col)
         placeAPiece(board, row, col, piece)
         return col
@@ -228,10 +219,10 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
     start_time = time.time()
     turns = 0
     while not game_over:
-        is_terminal = endOfGame(board)
-        # simple_draw_board(board)
+        terminal = endOfGame(board)
+        simple_draw_board(board)
         print("   next move   ")
-        if is_terminal:
+        if terminal:
             end_time = time.time()
             if winningMove(board, AI_PIECE):
                 print("Winner is AI!")
@@ -247,10 +238,6 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
                 return 0, turns, end_time - start_time
 
         if turn == AI_PIECE:
-            # col = minimax(board, 5, -math.inf, math.inf, True)
-            # get_valid_locations(board)
-            # row = nextOpenRow(board, col[0])
-            # placeAPiece(board,row, col[0] , AI_PIECE)
             AI_player(board,DepthPlayer1, AI_PIECE)
             turn = PLAYER_PIECE
         else:
@@ -260,4 +247,4 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
             turn = AI_PIECE
         turns += 1
 
-# Connect_Four(5,2,10,11)
+Connect_Four(5,2,6,7)
