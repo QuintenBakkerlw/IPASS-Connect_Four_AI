@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 import numpy as np
 import random
@@ -220,7 +221,6 @@ myCanvas.configure(height="670" , width="750", bg="#173cf2", highlightthickness=
 
 root.minsize(1300, 850)
 DEPTH_PLAYER_1 = 4
-
 board = create_board()
 
 def create_circle(x, y, r, canvasName, color): #center coordinates, radius
@@ -300,8 +300,11 @@ def connect_four_AI(turn):
             print("Tie!")
     if turn % 2 == 0:
         AI = AI_player(board, DEPTH_PLAYER_1, AI_PIECE)
-        if nextOpenRow(board, AI) != None:
-            drop_piece(AI , nextOpenRow(board,AI) - 1, "#c70839")
+        row = nextOpenRow(board, AI)
+        if  row == None:
+            row = 6
+        drop_piece(AI , row -1, "#c70839")
+        time.sleep(5)
     else:
         root.configure(bg="#ffc32b")
         bot_frame.pack()
@@ -311,7 +314,7 @@ def connect_four_AI(turn):
         bot_frame.pack_forget()
         root.configure(bg="#c70839")
     root.update()
-    root.after(10, connect_four_AI(turn + 1))
+    root.after(50, connect_four_AI(turn + 1))
 
 
 def drop_piece(col,row, color):
@@ -327,5 +330,5 @@ def drop_piece(col,row, color):
 
 placeBoard(0,0,50)
 myCanvas.pack()
-root.after(10, connect_four_AI(+1))
+root.after(50, connect_four_AI(+1))
 root.mainloop()
