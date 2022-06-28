@@ -15,6 +15,7 @@ EMPTY = 0
 # player/AI piece number
 PLAYER_PIECE = 1
 AI_PIECE = 2
+DEPTH_PLAYER_1 = 4
 
 # size of window that get checked for score
 WINDOW_LENGTH = 4
@@ -213,14 +214,16 @@ def AI_player(board, level, piece):  # level gaat expoinenteel meer tijd kosten 
     placeAPiece(board, row, col, piece)
     return col
 
+###################################################################
+###########################__TKINTER__#############################
+###################################################################
+
 root = tk.Tk()
 bot_frame = tk.Frame(root)
 bot_frame.config(bg='#ffc32b')
 myCanvas = tk.Canvas(root)
 myCanvas.configure(height="670" , width="750", bg="#173cf2", highlightthickness=0, relief="raised", bd=5)
-
 root.minsize(1300, 850)
-DEPTH_PLAYER_1 = 4
 board = create_board()
 
 def create_circle(x, y, r, canvasName, color): #center coordinates, radius
@@ -231,13 +234,11 @@ def create_circle(x, y, r, canvasName, color): #center coordinates, radius
     circle = canvasName.create_oval(x0, y0, x1, y1)
     return circle,myCanvas.itemconfig(circle, fil=color)
 
-ROW_AMOUNT = 6
-COLUMN_AMOUNT = 7
 def place_col(x,y,size,color):
     amount = 0
     x += 10
     y += 10
-    while amount != ROW_AMOUNT:
+    while amount != ROW_COUNT:
         placeholder = create_circle(x, y, size, myCanvas, color)
         amount += 1
         y = y + size * 2 + 5
@@ -246,15 +247,10 @@ def placeBoard(x,y,size):
     amount = 0
     x = 50
     y = 80
-    while amount != COLUMN_AMOUNT:
-        place_col(x,y,size, "#ededed")
+    while amount != COLUMN_COUNT:
+        place_col(x, y, size, "#ededed")
         x = x + size * 2 + 5
         amount += 1
-
-
-
-title = tk.Label(root, text="connect four", font=("Arial", 30),bg="#ededed", bd=5)
-title.pack(fill="x")
 
 var = tk.IntVar()
 def player_move_GUI(col):
@@ -264,6 +260,9 @@ def player_move_GUI(col):
         row = 5
     drop_piece(col, row, "#ffc32b")
     player_move(board, col)
+
+title = tk.Label(root, text="connect four", font=("Arial", 30),bg="#ededed", bd=5)
+title.pack(fill="x")
 
 c1 = tk.Button(root, text="1", width=12,height=2,relief="ridge", bg="#ffc32b", command=lambda j=6: player_move_GUI(j))
 c1.pack(in_=bot_frame, side="left", padx=5, pady=2)
@@ -284,18 +283,18 @@ def connect_four_AI(turn):
     terminal = endOfGame(board)
     simple_draw_board(board)
     if terminal:
-        newWindow = tk.Toplevel(root)
-        newWindow.geometry("500x500")
+        new_window = tk.Toplevel(root)
+        new_window.geometry("500x500")
         if winningMove(board, AI_PIECE):
-            label = tk.Label(newWindow, text="The AI won LMAO Loser!!", font=("Arial", 25))
+            label = tk.Label(new_window, text="The AI won LMAO Loser!!", font=("Arial", 25))
             label.pack()
             print("Winner is AI!")
         elif winningMove(board, PLAYER_PIECE):
-            label = tk.Label(newWindow, text="You won against a AI wel done", font=("Arial", 25))
+            label = tk.Label(new_window, text="You won against a AI wel done", font=("Arial", 25))
             label.pack()
             print("Winner is Player!")
         else:
-            label = tk.Label(newWindow, text="It is a Tie", font=("Arial", 25))
+            label = tk.Label(new_window, text="It is a Tie", font=("Arial", 25))
             label.pack()
             print("Tie!")
     if turn % 2 == 0:
@@ -304,7 +303,7 @@ def connect_four_AI(turn):
         if  row == None:
             row = 6
         drop_piece(AI , row -1, "#c70839")
-        time.sleep(5)
+        time.sleep(2)
     else:
         root.configure(bg="#ffc32b")
         bot_frame.pack()

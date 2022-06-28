@@ -133,6 +133,8 @@ def size_turns():
 
 
 
+
+
 # y = 82,666x^2 - 987,31x + 2976,2
 # formule for size * time
 def size_time():
@@ -149,6 +151,8 @@ def size_time():
     plt.title("Size * Time")
     plt.plot(y_axis,x_axis, marker = 'o')
     plt.show()
+
+
 
 # formule for time * depth
 # y = 0,0022e 1,8826x
@@ -170,6 +174,8 @@ def time_depth(end_depth):
 
 
 
+
+
 def depth_depth_turns():
     one = []
     two = []
@@ -177,6 +183,7 @@ def depth_depth_turns():
     four = []
     five = []
     six = []
+
     for i in data_depth_2:
         if i["depth_player_1"] == 1:
             one.append(i["turns"])
@@ -192,13 +199,15 @@ def depth_depth_turns():
             six.append(i["turns"])
 
     plt.plot([1,2,3,4,5,6], one , label = "depth 1", marker='o')
-    plt.plot([1,2,3,4,5,6], two , label = "depth 2" , marker='o')
-    plt.plot([1,2,3,4,5,6], three , label = "depth 3", marker='o')
-    plt.plot([1,2,3,4,5,6], four , label = "depth 4", marker='o')
-    plt.plot([1,2,3,4,5,6], five , label = "depth 5", marker='o')
-    plt.plot([1,2,3,4,5,6], six , label = "depth 6", marker='o')
+    plt.plot([2,3,4,5,6], two[1:] , label = "depth 2" , marker='o')
+    plt.plot([3,4,5,6], three[2:] , label = "depth 3", marker='o')
+    plt.plot([4,5,6], four[3:] , label = "depth 4", marker='o')
+    plt.plot([5,6], five[4:] , label = "depth 5", marker='o')
+    plt.plot([6], six[5:] , label = "depth 6", marker='o')
     plt.legend()
     plt.xlabel("Depth count of opponent")
     plt.ylabel("Amount of turns to finish")
     plt.title("Depth * Detph * Turns")
     plt.show()
+
+depth_depth_turns()
