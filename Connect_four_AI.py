@@ -9,11 +9,18 @@ import time
 ROW_COUNT = 6
 COLUMN_COUNT = 7
 
-EMPTY = 0
+# depth of the two AI players
+DEPTH_PLAYER_1 = 4
+DEPTH_PLAYER_2 = 2
+
+# choose your second player
+# you have the choice of "AI" - "HUMAN" or "RANDOM_MOVE"
+SECOND_PLAYER = "AI"
 
 # player/AI piece number
 PLAYER_PIECE = 1
 AI_PIECE = 2
+EMPTY = 0
 
 # size of window that get checked for score
 WINDOW_LENGTH = 4
@@ -155,30 +162,30 @@ def minimax(board, depth, maximizingPlayer):
         else:
             return (None, score(board, AI_PIECE))
     if maximizingPlayer:
-        value = -math.inf
+        best_score = -math.inf
         column = random.choice(valid_locations)
         for col in valid_locations:
             row = nextOpenRow(board, col)
             b_copy = board.copy()
             placeAPiece(b_copy, row, col, AI_PIECE)
             new_score = minimax(b_copy, depth - 1, False)[1]
-            if new_score > value:
-                value = new_score
+            if new_score > best_score:
+                best_score = new_score
                 column = col
-        return column, value
+        return column, best_score
 
     else:  # Minimizing player
-        value = math.inf
+        best_score = math.inf
         column = random.choice(valid_locations)
         for col in valid_locations:
             row = nextOpenRow(board, col)
             b_copy = board.copy()
             placeAPiece(b_copy, row, col, PLAYER_PIECE)
             new_score = minimax(b_copy, depth - 1, True)[1]
-            if new_score < value:
-                value = new_score
+            if new_score < best_score:
+                best_score = new_score
                 column = col
-        return column, value
+        return column, best_score
 
 
 # this function get the usable location on the board
@@ -246,11 +253,14 @@ while not game_over:
         break
 
     if turn == AI_PIECE:
-        AI = AI_player(board, 5, AI_PIECE)
+        AI = AI_player(board, DEPTH_PLAYER_1, AI_PIECE)
         turn = PLAYER_PIECE
     else:
-        # player_move(board)
-        # random_player(board)
-        AI_player(board, 3, PLAYER_PIECE)
+        if SECOND_PLAYER == "AI":
+            AI_player(board, DEPTH_PLAYER_2, PLAYER_PIECE)
+        elif SECOND_PLAYER == "HUMAN":
+            player_move(board)
+        elif SECOND_PLAYER == "RANDOM_MOVE":
+            random_player(board)
         turn = AI_PIECE
     turns += 1

@@ -1,11 +1,4 @@
 import tkinter as tk
-root = tk.Tk()
-top_frame = tk.Frame(root)
-myCanvas = tk.Canvas(root)
-myCanvas.configure(height="700" , width="750", bg="blue")
-
-root.minsize(1500, 1080)
-
 import numpy as np
 import random
 import math
@@ -155,30 +148,30 @@ def minimax(board, depth, maximizingPlayer):
         else:
             return (None, score(board, AI_PIECE))
     if maximizingPlayer:
-        value = -math.inf
+        best_score = -math.inf
         column = random.choice(valid_locations)
         for col in valid_locations:
             row = nextOpenRow(board, col)
             b_copy = board.copy()
             placeAPiece(b_copy, row, col, AI_PIECE)
             new_score = minimax(b_copy, depth - 1, False)[1]
-            if new_score > value:
-                value = new_score
+            if new_score > best_score:
+                best_score = new_score
                 column = col
-        return column, value
+        return column, best_score
 
     else:  # Minimizing player
-        value = math.inf
+        best_score = math.inf
         column = random.choice(valid_locations)
         for col in valid_locations:
             row = nextOpenRow(board, col)
             b_copy = board.copy()
             placeAPiece(b_copy, row, col, PLAYER_PIECE)
             new_score = minimax(b_copy, depth - 1, True)[1]
-            if new_score < value:
-                value = new_score
+            if new_score < best_score:
+                best_score = new_score
                 column = col
-        return column, value
+        return column, best_score
 
 # this function get the usable location on the board
 def validLocations(board):
@@ -219,6 +212,15 @@ def AI_player(board, level, piece):  # level gaat expoinenteel meer tijd kosten 
     placeAPiece(board, row, col, piece)
     return col
 
+root = tk.Tk()
+bot_frame = tk.Frame(root)
+bot_frame.config(bg='#ffc32b')
+myCanvas = tk.Canvas(root)
+myCanvas.configure(height="670" , width="750", bg="#173cf2", highlightthickness=0, relief="raised", bd=5)
+
+root.minsize(1300, 850)
+DEPTH_PLAYER_1 = 4
+
 board = create_board()
 
 def create_circle(x, y, r, canvasName, color): #center coordinates, radius
@@ -245,41 +247,42 @@ def placeBoard(x,y,size):
     x = 50
     y = 80
     while amount != COLUMN_AMOUNT:
-        place_col(x,y,size, "white")
+        place_col(x,y,size, "#ededed")
         x = x + size * 2 + 5
         amount += 1
 
-placeBoard(0,0,50)
-
-title = tk.Label(root, text="connect four")
-title.pack()
-
-c1 = tk.Button(root, text="1", width=12,command=lambda j=6: checkboxes(j))
-c1.pack(in_=top_frame, side="left", padx=5)
-c2 = tk.Button(root, text="2",width=12, command=lambda j=5: checkboxes(j))
-c2.pack(in_=top_frame, side="left", padx=5)
-c3 = tk.Button(root, text="3",width=12, command=lambda j=4: checkboxes(j))
-c3.pack(in_=top_frame, side="left", padx=5)
-c4 = tk.Button(root, text="4",width=12, command=lambda j=3: checkboxes(j))
-c4.pack(in_=top_frame, side="left", padx=5)
-c5 = tk.Button(root, text="5",width=12, command=lambda j=2: checkboxes(j))
-c5.pack(in_=top_frame, side="left", padx=5)
-c6 = tk.Button(root, text="6",width=12, command=lambda j=1: checkboxes(j))
-c6.pack(in_=top_frame, side="left", padx=5)
-c7 = tk.Button(root, text="7",width=12, command=lambda j=0: checkboxes(j))
-c7.pack(in_=top_frame, side="left", padx=5)
 
 
-def checkboxes(number):
+title = tk.Label(root, text="connect four", font=("Arial", 30),bg="#ededed", bd=5)
+title.pack(fill="x")
+
+var = tk.IntVar()
+def player_move_GUI(col):
     var.set(1)
-    drop_piece(number, nextOpenRow(board, number), "yellow")
-    player_move(board, number)
+    row = nextOpenRow(board,col)
+    if row == None:
+        row = 5
+    drop_piece(col, row, "#ffc32b")
+    player_move(board, col)
 
+c1 = tk.Button(root, text="1", width=12,height=2,relief="ridge", bg="#ffc32b", command=lambda j=6: player_move_GUI(j))
+c1.pack(in_=bot_frame, side="left", padx=5, pady=2)
+c2 = tk.Button(root, text="2",width=12,height=2,relief="ridge", bg="#ffc32b", command=lambda j=5: player_move_GUI(j))
+c2.pack(in_=bot_frame, side="left", padx=5, pady=2)
+c3 = tk.Button(root, text="3",width=12,height=2,relief="ridge", bg="#ffc32b", command=lambda j=4: player_move_GUI(j))
+c3.pack(in_=bot_frame, side="left", padx=5, pady=2)
+c4 = tk.Button(root, text="4",width=12,height=2,relief="ridge", bg="#ffc32b", command=lambda j=3: player_move_GUI(j))
+c4.pack(in_=bot_frame, side="left", padx=5, pady=2)
+c5 = tk.Button(root, text="5",width=12,height=2,relief="ridge", bg="#ffc32b", command=lambda j=2: player_move_GUI(j))
+c5.pack(in_=bot_frame, side="left", padx=5, pady=2)
+c6 = tk.Button(root, text="6",width=12,height=2,relief="ridge", bg="#ffc32b", command=lambda j=1: player_move_GUI(j))
+c6.pack(in_=bot_frame, side="left", padx=5, pady=2)
+c7 = tk.Button(root, text="7",width=12,height=2,relief="ridge", bg="#ffc32b", command=lambda j=0: player_move_GUI(j))
+c7.pack(in_=bot_frame, side="left", padx=5, pady=2)
 
-def algro(turn):
+def connect_four_AI(turn):
     terminal = endOfGame(board)
     simple_draw_board(board)
-    print("   next move   ")
     if terminal:
         newWindow = tk.Toplevel(root)
         newWindow.geometry("500x500")
@@ -296,26 +299,20 @@ def algro(turn):
             label.pack()
             print("Tie!")
     if turn % 2 == 0:
-
-        AI = AI_player(board, 5, AI_PIECE)
+        AI = AI_player(board, DEPTH_PLAYER_1, AI_PIECE)
         if nextOpenRow(board, AI) != None:
-            drop_piece(AI , nextOpenRow(board,AI) - 1, "red")
-        root.update()
+            drop_piece(AI , nextOpenRow(board,AI) - 1, "#c70839")
     else:
-
-        top_frame.pack()
+        root.configure(bg="#ffc32b")
+        bot_frame.pack()
         print("waiting")
         c1.wait_variable(var)
         print("stop waiting")
-        top_frame.pack_forget()
+        bot_frame.pack_forget()
+        root.configure(bg="#c70839")
+    root.update()
+    root.after(10, connect_four_AI(turn + 1))
 
-        root.update()
-
-    root.after(10, algro(turn + 1))
-    root.mainloop()
-
-
-var = tk.IntVar()
 
 def drop_piece(col,row, color):
     corrected_col  = 6 - col
@@ -326,11 +323,9 @@ def drop_piece(col,row, color):
         x = x + 50 * 2 + 5
     for c in range(0,corrected_row):
         y = y + 50 * 2 + 5
-    placeholder = create_circle(x, y, 50, myCanvas, color)
+    piece = create_circle(x, y, 50, myCanvas, color)
 
-
+placeBoard(0,0,50)
 myCanvas.pack()
-top_frame.pack(side="top")
-root.after(10, algro(+1))
-
+root.after(10, connect_four_AI(+1))
 root.mainloop()

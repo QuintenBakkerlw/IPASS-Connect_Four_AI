@@ -149,30 +149,30 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
             else:
                 return (None, score(board, AI_PIECE))
         if maximizingPlayer:
-            value = -math.inf
+            best_score = -math.inf
             column = random.choice(valid_locations)
             for col in valid_locations:
                 row = nextOpenRow(board, col)
                 b_copy = board.copy()
                 placeAPiece(b_copy, row, col, AI_PIECE)
                 new_score = minimax(b_copy, depth - 1, False)[1]
-                if new_score > value:
-                    value = new_score
+                if new_score > best_score:
+                    best_score = new_score
                     column = col
-            return column, value
+            return column, best_score
 
         else:  # Minimizing player
-            value = math.inf
+            best_score = math.inf
             column = random.choice(valid_locations)
             for col in valid_locations:
                 row = nextOpenRow(board, col)
                 b_copy = board.copy()
                 placeAPiece(b_copy, row, col, PLAYER_PIECE)
                 new_score = minimax(b_copy, depth - 1, True)[1]
-                if new_score < value:
-                    value = new_score
+                if new_score < best_score:
+                    best_score = new_score
                     column = col
-            return column, value
+            return column, best_score
 
     # this function get the usable location on the board
     def validLocations(board):
@@ -223,27 +223,25 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
         simple_draw_board(board)
         print("   next move   ")
         if terminal:
+            game_over = True
             end_time = time.time()
             if winningMove(board, AI_PIECE):
                 print("Winner is AI!")
-                game_over = True
                 return 1, turns, end_time-start_time
             elif winningMove(board, PLAYER_PIECE):
                 print("Winner is Player!")
-                game_over = True
                 return 2, turns, end_time-start_time
             else:
                 print("Tie!")
-                game_over = True
                 return 0, turns, end_time - start_time
 
         if turn == AI_PIECE:
             AI_player(board,DepthPlayer1, AI_PIECE)
             turn = PLAYER_PIECE
         else:
-            # player_move(board)
-            # random_player(board)
             AI_player(board,DepthPlayer2, PLAYER_PIECE)
             turn = AI_PIECE
         turns += 1
+
+Connect_Four(4,2,6,7)
 
