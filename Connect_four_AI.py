@@ -10,8 +10,8 @@ ROW_COUNT = 6
 COLUMN_COUNT = 7
 
 # depth of the two AI players
-DEPTH_PLAYER_1 = 4
-DEPTH_PLAYER_2 = 2
+DEPTH_PLAYER_1 = 4 #(AI)
+DEPTH_PLAYER_2 = 3 #(Player)
 
 # choose your second player
 # you have the choice of "AI" - "HUMAN" or "RANDOM_MOVE"
