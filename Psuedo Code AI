@@ -1,0 +1,105 @@
+psuedo code AI
+
+-Score
+-evaluatieWindow
+-Minimax
+
+
+Score :
+
+score(board, piec):
+
+	kijk naar de center col van de board
+	tel hoeveel peices van speler erin zitten
+	score = hoeveelheid peices * getal
+
+	# horizontaal 
+	for r in aantal rows:
+		for c in aantal col 
+			window == c + 4
+			score =evaluate_window(window, peice)
+
+	# verticaal
+	for r in aantal rows
+		for c in aantal col
+			window == r + 4
+			score = evaluate_window(window,peice)
+
+	# postive diagonaal
+	for r in aantal rows
+		for c in aantal col
+			for i in range(0,4)
+				window = board[r+i][c+i]
+			score = evaluate_window(window, peice)
+
+	# negative diananaal
+	for r in aantal rows
+		for c in aantal col
+			for i in range(0,4)
+				window = board[r + 3 -i][c + 3 - i]
+			score = evaluate_window(window, peice)
+
+	return score
+
+evaluate_window :
+
+evaluate_window(window, piece)
+	opponent = AI
+	if piece == Ai:
+		opponent = Player
+	
+	count peices in window
+	if pieces == 4
+	score += getal
+
+	if pieces == 3 and rest van window is leeg
+	score += getal
+
+	if peices == 2 and rest van window is leeg
+	score += getal
+	
+	if opponent peices == 3 and rest van window is leeg
+	score -= getal
+
+	return getal
+
+minimax:
+
+minimax(board, depth, maximizingPlayer)
+
+	if depth is 0 of spel is afgelopen:
+		if AI is winner:
+			return (none, 1000000)
+		if Player is winner:
+			return (none, -100000)
+		else:
+			return (none, 0)
+	else:
+		return(none, score)
+
+	if maximizingplayer is true:
+	best_score = kleinste mogelijk getal
+	colum == random colum van valid_locations
+	for c in valid_locations:
+		get next open row
+		b_copy = copy of board
+		place a peice
+		new_score = minimax(b_copy, depth -1, false)
+		if new_score > best_score
+			best_score = new_score
+			column = c	
+
+	else:
+	best_score = grooste mogelijk getal
+	colum == random colum van valid_locations
+	for c in valid_locations:
+		get next open row
+		b_copy = copy of board
+		place a peice
+		new_score = minimax(b_copy, depth -1, false)
+		if new_score < best_score
+			best_score = new_score
+			column = c
+	return column, value
+
+			
