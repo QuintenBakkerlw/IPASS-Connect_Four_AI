@@ -258,5 +258,4 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
             turn = AI_PIECE
         turns += 1
 
-Connect_Four(4,2,6,7)
 
