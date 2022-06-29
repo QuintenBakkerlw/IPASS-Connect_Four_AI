@@ -106,6 +106,7 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
         for r in range(ROW_COUNT):
             row_array = [int(i) for i in list(board[r, :])]
             for c in range(COLUMN_COUNT - 3):
+                # puts array in window of 4 to be scored
                 window = row_array[c:c + WINDOW_LENGTH]
                 score += evaluate_window(window, piece)
 
@@ -113,17 +114,20 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
         for c in range(COLUMN_COUNT):
             col_array = [int(i) for i in list(board[:, c])]
             for r in range(ROW_COUNT - 3):
+                # puts array in window of 4 to be scored
                 window = col_array[r:r + WINDOW_LENGTH]
                 score += evaluate_window(window, piece)
 
         # Score posiive sloped diagonal
         for r in range(ROW_COUNT - 3):
             for c in range(COLUMN_COUNT - 3):
+                # puts array in window of 4 to be scored
                 window = [board[r + i][c + i] for i in range(WINDOW_LENGTH)]
                 score += evaluate_window(window, piece)
-        # Score negative sloped diaganal
+
         for r in range(ROW_COUNT - 3):
             for c in range(COLUMN_COUNT - 3):
+                # puts array in window of 4 to be scored
                 window = [board[r + 3 - i][c + i] for i in range(WINDOW_LENGTH)]
                 score += evaluate_window(window, piece)
 
@@ -136,8 +140,11 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
 
     # this function uses minimax to determan the next move to make
     def minimax(board, depth, maximizingPlayer):
+        # basic value to be used
         valid_locations = validLocations(board)
         terminal = endOfGame(board)
+
+        # end statment
         if depth == 0 or terminal:
             if terminal:
                 if winningMove(board, AI_PIECE):
@@ -146,16 +153,21 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
                     return (None, -10000000000000)
                 else:
                     return (None, 0)
+                # depth == 0
             else:
                 return (None, score(board, AI_PIECE))
+
         if maximizingPlayer:
             best_score = -math.inf
             column = random.choice(valid_locations)
+            # pick a random locations and repeat until depth 0 or terminal is reached
             for col in valid_locations:
                 row = nextOpenRow(board, col)
                 b_copy = board.copy()
                 placeAPiece(b_copy, row, col, AI_PIECE)
                 new_score = minimax(b_copy, depth - 1, False)[1]
+
+                # set new score if new_score is higher the best_score
                 if new_score > best_score:
                     best_score = new_score
                     column = col
@@ -164,11 +176,14 @@ def Connect_Four(DepthPlayer1, DepthPlayer2, row_count, col_count):
         else:  # Minimizing player
             best_score = math.inf
             column = random.choice(valid_locations)
+            # pick a random locations and repeat until depth 0 or terminal is reached
             for col in valid_locations:
                 row = nextOpenRow(board, col)
                 b_copy = board.copy()
                 placeAPiece(b_copy, row, col, PLAYER_PIECE)
                 new_score = minimax(b_copy, depth - 1, True)[1]
+
+                # set new score if new_score is higher the best_score
                 if new_score < best_score:
                     best_score = new_score
                     column = col

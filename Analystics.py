@@ -3,6 +3,8 @@ import json
 import matplotlib.pyplot as plt
 import math
 
+
+
 # usable disctionary to be impoted to json file
 dictionary_Depth = {
     "winner" : 0,
@@ -40,7 +42,7 @@ def Connect_four_depth():
             dictionary_Depth["total_time"] = output_1[2]
             dictionary_Depth["depth_player_1"] = D1
             dictionary_Depth["depth_player_2"] = D2
-            import_data("Data.json",dictionary_Depth)
+            import_data("Depth_Depth_Data.json",dictionary_Depth)
 
 # function to get data to import json file(size info)
 def Connect_four_size():
@@ -52,17 +54,17 @@ def Connect_four_size():
             dictionary_Size["total_time"] = output_2[2]
             dictionary_Size["row_size"] = length
             dictionary_Size["col_size"] = length+1
-            import_data("Size_Data.json",dictionary_Size)
+            import_data("Json_files/Size_Data.json",dictionary_Size)
 
 
 # read json files
-with open("Depth_Data.json", "r") as file:
+with open("Json_files/Depth_Data.json", "r") as file:
     data_depth = json.load(file)
 
-with open("Data.json", "r") as file:
+with open("Json_files/Depth_Depth_Data.json", "r") as file:
     data_depth_2 = json.load(file)
 
-with open("Size_Data.json", "r") as file:
+with open("Json_files/Size_Data.json", "r") as file:
     data_size = json.load(file)
 
 # function to get Depth * time played
@@ -209,5 +211,3 @@ def depth_depth_turns():
     plt.ylabel("Amount of turns to finish")
     plt.title("Depth * Detph * Turns")
     plt.show()
-
-depth_depth_turns()
